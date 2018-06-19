@@ -58,13 +58,28 @@ def process_docs(directory, vocab):
         path = directory + '/' + filename
         # add doc to vocab
         add_doc_to_vocab(path,vocab)
+        
+# save list to file
+def save_list(lines, filename):
+    # convert lines to a single blob of text
+    data = '\n'.join(lines)
+    # open file
+    file = open(filename, 'w')
+    # wrtie text
+    file.write(data)
+    # close file
+    file.close()
 
 # define vocab
 vocab = Counter()
-#add all docs to the vocab
+# add all docs to the vocab
 process_docs('txt_sentoken/pos', vocab)
 process_docs('txt_sentoken/neg', vocab)
 # print the size of the vocab
 print(len(vocab))
-# print the top words in the vocab
-print(vocab.most_common(50))
+# keep tokens with a min occurence
+min_occurence = 2
+tokens = [k for k,c in vocab.items() if c >= min_occurence]
+print(len(tokens))
+# save tokens to a vocabulary file
+save_list(tokens, 'vocab.txt')
